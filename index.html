@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lohith & Deepika Wedding</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+html{
+  font-size:clamp(14px, 3.5vw, 18px);
+}
+
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:black;
+  color:white;
+  overflow-x:hidden;
+}
+
+/* Sections */
+section{
+  position:absolute;
+  width:100%;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  transition:all 1.2s ease;
+  text-align:center;
+  padding:20px;
+  box-sizing:border-box;
+
+  /* Background image support */
+  background-size:cover;
+  background-position: 50% 60%;
+}
+
+.hidden{
+  opacity:0;
+  pointer-events:none;
+  transform:scale(1.05);
+}
+
+.visible{
+  opacity:1;
+  transform:scale(1);
+}
+
+/* Video */
+video{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  height:100vh;
+  max-width:100%;
+  object-fit:contain;
+  z-index:-2;
+  opacity:0;
+  transition:opacity 1s ease;
+  background:black;
+}
+
+video.show{
+  opacity:1;
+}
+
+h1{
+  font-family:'Cinzel','Poppins','Segoe UI Emoji','Apple Color Emoji',serif;
+  font-size:clamp(22px, 6vw, 40px);
+  line-height:1.4;
+  white-space:pre-line;
+  padding:0 15px;
+  word-break:break-word;
+}
+
+/* Couple image */
+img{
+  width:80%;
+  max-width:320px;
+  border-radius:15px;
+  margin-top:20px;
+  box-shadow:0 0 25px gold;
+}
+
+button{
+  margin-top:25px;
+  padding:12px 30px;
+  border-radius:30px;
+  border:none;
+  background:linear-gradient(45deg,gold,orange);
+  cursor:pointer;
+  font-weight:bold;
+}
+
+/* Typing */
+.typing span{
+  opacity:0;
+  display:inline-block;
+  transform:translateY(10px);
+  animation:fadeLetter 0.4s ease forwards;
+}
+
+@keyframes fadeLetter{
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.hint{
+  position:absolute;
+  bottom:20px;
+  font-size:14px;
+  opacity:0.7;
+}
+
+/* Top panel */
+.top-right{
+  position:absolute;
+  top:20px;
+  left:20px;
+  text-align:left;
+}
+
+.top-right img{
+  width:120px;
+  margin-bottom:10px;
+}
+
+.countdown{
+  color:gold;
+  font-size:18px;
+  font-weight:bold;
+}
+
+.scan-text{
+  font-size:14px;
+}
+
+.blur-bg{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  background: rgba(0,0,0,0.3); /* dark overlay for readability */
+
+  z-index:0;
+}
+
+/* Make sure content is above blur */
+section *{
+  position:relative;
+  z-index:1;
+}
+
+.map-btn{
+  margin-top:15px;
+  padding:12px 20px;
+  border-radius:25px;
+  border:none;
+  background:linear-gradient(45deg, gold, orange);
+  font-weight:bold;
+  cursor:pointer;
+  font-size:16px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Background Video -->
+<video id="bgVideo" loop playsinline>
+  <source src="video.mp4" type="video/mp4">
+</video>
+
+<!-- SECTION 1 -->
+<section id="s1" class="visible" style="background-image:url('slide1.jpg')">
+  <h1 id="greeting" class="typing"></h1>
+  <button onclick="nextSection()">Enter Our Story</button>
+  <div class="hint">👉 Swipe or Tap</div>
+</section>
+
+<!-- SECTION 2 -->
+<section id="s2" class="hidden" style="background-image:url('slide2.jpg'); background-position:50% 10%;">
+  <div class="blur-bg"></div>
+  <h1>Our Story ❤️</h1>
+  <img src="couple.jpg">
+  <button onclick="nextSection()">Continue Journey</button>
+</section>
+
+<!-- SECTION 3 -->
+<section id="s3" class="hidden" style="background-image:url('slide3.jpg')">
+  <div class="blur-bg"></div>
+  <h1 class="typing">It all started with a beautiful connection...</h1>
+  <button onclick="nextSection()">Continue Journey</button>
+</section>
+
+<!-- SECTION 4 -->
+<section id="s4" class="hidden" style="background-image:url('slide4.jpg'); background-position:50% 30%;">
+  <div class="blur-bg"></div>
+  <h1 class="typing">You Are Invited...</h1>
+  <button onclick="nextSection()">See Our Big Day</button>
+</section>
+
+<!-- FINAL SECTION -->
+<section id="s5" class="hidden" style="background-image:url('slide5.jpg')">
+
+  <div class="top-right">
+    
+    <div class="countdown" id="countdown"></div>
+
+    <button class="map-btn" onclick="openMaps()">
+      📍 Click to navigate in Maps
+    </button>
+
+  </div>
+
+</section>
+
+
+<audio id="music" src="music.mp3"></audio>
+<audio id="bells" src="bells.mp3"></audio>
+
+<script>
+
+// Personalization
+const params=new URLSearchParams(window.location.search);
+const guest=params.get('name')||'There!';
+premiumTypingEffect("greeting", `Hey ${guest} You Are Invited to Our Wedding`, 35);
+
+// Sections
+const sections=['s1','s2','s3','s4','s5'];
+let currentIndex=0;
+
+function premiumTypingEffect(elementId, text, speed=40){
+  const el=document.getElementById(elementId);
+  el.innerHTML="";
+  let i=0;
+
+  function type(){
+    if(i<text.length){
+      const span=document.createElement("span");
+      span.innerHTML=text[i]===" "?"&nbsp;":text[i];
+      span.style.animationDelay=(i*0.03)+"s";
+      el.appendChild(span);
+      i++;
+      setTimeout(type,speed);
+    }
+  }
+  type();
+}
+
+function showSection(index){
+  sections.forEach((id,i)=>{
+    const el=document.getElementById(id);
+    el.classList.remove('visible','hidden');
+    el.classList.add(i===index?'visible':'hidden');
+  });
+
+  const video=document.getElementById('bgVideo');
+
+  if(index === sections.length-1){
+    video.classList.add('show');
+    video.play().catch(()=>{});
+  } else {
+    video.classList.remove('show');
+    video.pause();
+  }
+}
+
+function nextSection(){
+  if(currentIndex < sections.length-1){
+    currentIndex++;
+    showSection(currentIndex);
+    startAudio();
+  }
+}
+
+function prevSection(){
+  if(currentIndex > 0){
+    currentIndex--;
+    showSection(currentIndex);
+  }
+}
+
+// Audio
+let audioStarted=false;
+function startAudio(){
+  if(!audioStarted){
+    document.getElementById('music').play().catch(()=>{});
+    document.getElementById('bells').play().catch(()=>{});
+    audioStarted=true;
+  }
+}
+
+// Swipe
+let startX=0,endX=0;
+window.addEventListener('touchstart',e=>startX=e.touches[0].clientX);
+window.addEventListener('touchend',e=>{
+  endX=e.changedTouches[0].clientX;
+  if(Math.abs(startX-endX)>50){
+    startX>endX?nextSection():prevSection();
+  }
+});
+
+// Tap
+window.addEventListener('click',e=>{
+  if(e.target.tagName!=='BUTTON') nextSection();
+});
+
+function openMaps(){
+  window.open("https://google.com/maps/place/Sri+Siddhivinayaka+Gudi+-+Kaaranagiri/data=!4m2!3m1!1s0x0:0x10762f81d7855a9b?sa=X&ved=1t:2428&ictx=111", "_blank");
+}
+
+// Countdown
+const date=new Date("April 8, 2026 10:36:00").getTime();
+setInterval(()=>{
+  const now=new Date().getTime();
+  const d=date-now;
+  const days=Math.floor(d/(1000*60*60*24));
+  const h=Math.floor((d%(1000*60*60*24))/(1000*60*60));
+  const m=Math.floor((d%(1000*60*60))/(1000*60));
+  const el=document.getElementById('countdown');
+  if(el) el.innerHTML=`${days}d ${h}h ${m}m to go`;
+},1000);
+
+</script>
+
+</body>
+</html>
