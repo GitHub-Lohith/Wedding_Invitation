@@ -328,7 +328,7 @@ window.addEventListener("resize", resizeCanvas);
 window.addEventListener("orientationchange", resizeCanvas);
 let parts=[];
 for(let i=0;i<80;i++){parts.push({x:Math.random()*pcanvas.width,y:Math.random()*pcanvas.height,r:Math.random()*2});}
-function drawP(){pctx.clearRect(0,0,pcanvas.width,pcanvas.height);pctx.fillStyle='rgba(255,215,0,0.7)';parts.forEach(p=>{pctx.beginPath();pctx.arc(p.x,p.y,p.r,0,Math.PI*2);pctx.fill();p.y+=0.3;if(p.y>pcanvas.height)p.y=0});requestAnimationFrame(drawP)}
+function drawP(){pctx.clearRect(0,0,pcanvas.width,pcanvas.height);pctx.fillStyle='gold';parts.forEach(p=>{pctx.beginPath();pctx.arc(p.x,p.y,p.r,0,Math.PI*2);pctx.fill();p.y+=0.3;if(p.y>pcanvas.height)p.y=0});requestAnimationFrame(drawP)}
 drawP();
 
 // Fireworks (disabled on last slide automatically)
