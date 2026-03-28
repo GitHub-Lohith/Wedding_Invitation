@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<html{
+  font-size:clamp(14px, 3.5vw, 18px);
+}>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lohith & Deepika Wedding</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:black;
+  color:white;
+  overflow-x:hidden;   /* allow vertical scroll */
+}
+section{position:absolute;width:100%;height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:all 1.2s ease}
+.hidden{opacity:0;pointer-events:none;transform:scale(1.05)}
+.visible{opacity:1;transform:scale(1)}
+
+/* Video initially hidden */
+video{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  
+  width:auto;
+  height:100vh;   /* Force full height (portrait) */
+  
+  max-width:100%;
+  object-fit:contain; /* Prevent cropping */
+  
+  z-index:-3;
+  opacity:0;
+  transition:opacity 1s ease;
+  background:black;
+}
+
+video.show{
+  opacity:1;
+}
+
+canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-2}
+
+h1{
+  font-family:'Cinzel',serif;
+  font-size:clamp(22px, 6vw, 40px);
+  text-align:center;
+  line-height:1.4;
+
+  padding:0 15px;
+
+  word-break:break-word;   /* 🔥 prevents cut */
+}
+img{width:300px;border-radius:15px;margin-top:20px;box-shadow:0 0 25px gold}
+
+button{margin-top:25px;padding:12px 30px;border-radius:30px;border:none;background:linear-gradient(45deg,gold,orange);cursor:pointer;font-weight:bold}
+
+.typing{
+  border-right:3px solid gold;
+  display:inline-block;
+  white-space:normal;   /* 🔥 allow wrapping */
+  overflow:hidden;
+  max-width:100%;
+  animation:fadeTyping 2.5s ease forwards;
+}
+
+@keyframes fadeTyping{
+  from{opacity:0}
+  to{opacity:1}
+}
+@keyframes typing{from{width:0}to{width:100%}}
+
+.hint{position:absolute;bottom:20px;font-size:14px;opacity:0.7}
+
+/* Top right panel */
+/* Top left panel */
+.top-right{
+  position:absolute;
+  top:20px;
+  left:20px;
+  text-align:left;
+  animation:fadeInPanel 2s ease forwards;
+  opacity:0;
+}
+.top-right img{
+  width:120px;
+  margin-bottom:10px;
+}
+.countdown{
+  color:black;
+  font-size:18px;
+  font-weight:bold;
+}
+.scan-text{
+  font-size:14px;
+  margin-top:5px;
+}
+
+@keyframes fadeInPanel{
+  from{opacity:0; transform:translateY(-20px)}
+  to{opacity:1; transform:translateY(0)}
+}
+.top-right img{
+  width:120px;
+  margin-bottom:10px;
+}
+.countdown{
+  color:gold;
+  font-size:18px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Background Video (only last slide) -->
+<video id="bgVideo" loop playsinline webkit-playsinline>
+  <source src="video.mp4" type="video/mp4">
+</video>
+
+<canvas id="particles"></canvas>
+<canvas id="fireworks"></canvas>
+
+<section{
+  padding:20px;
+  box-sizing:border-box;
+  text-align:center;
+}>
+  
+<section id="s1" class="visible">
+  <h1 id="greeting" class="typing"></h1>
+  <button onclick="nextSection()">Enter Our Story</button>
+  <div class="hint">👉 Swipe or Tap</div>
+</section>
+
+<section id="s2" class="hidden">
+  <h1>Our Story ❤️</h1>
+  <img src="couple.JPG">
+  <button onclick="nextSection()">Continue Journey</button>
+  <div class="hint">👉 Swipe</div>
+</section>
+
+<section id="s3" class="hidden">
+  <h1 class="typing">It all started with a beautiful connection...</h1>
+  <button onclick="nextSection()">Continue Journey</button>
+</section>
+
+<section id="s4" class="hidden">
+  <h1 class="typing">You Are Invited...</h1>
+  <button onclick="nextSection()">See Our Big Day</button>
+</section>
+
+<!-- Final Slide (clean cinematic) -->
+<section id="s5" class="hidden">
+
+  <div class="top-right">
+    <img src="qr.jpg">
+    <div class="scan-text">Scan to Navigate to our wedding destination</div>
+    <div class="countdown" id="countdown"></div>
+  </div>
+  </div>
+
+</section>
+
+<audio id="music" src="music.mp3"></audio>
+<audio id="bells" src="bells.mp3"></audio>
+
+<script>
+
+// Personalization
+const params=new URLSearchParams(window.location.search);
+const guest=params.get('name')||'There !';
+document.getElementById('greeting').innerText=`Hi ${guest} You Are Invited to our Wedding💍`;
+
+// Sections
+const sections=['s1','s2','s3','s4','s5'];
+let currentIndex=0;
+
+function showSection(index){
+  sections.forEach((id,i)=>{
+    const el=document.getElementById(id);
+    el.classList.remove('visible','hidden');
+    el.classList.add(i===index?'visible':'hidden');
+  });
+
+  const video=document.getElementById('bgVideo');
+  const fireworksCanvas=document.getElementById('fireworks');
+
+if(index === sections.length-1){
+  video.classList.add('show');
+  
+  video.muted = false;
+  video.setAttribute("playsinline", "");
+  video.setAttribute("webkit-playsinline", "");
+
+  video.play().catch(()=>{});
+  fireworksCanvas.style.display='none';
+}
+
+  if(index === sections.length-1){
+    video.classList.add('show');
+    video.play();
+    fireworksCanvas.style.display='none';
+  } else {
+    video.classList.remove('show');
+    video.pause();
+    fireworksCanvas.style.display='block';
+  }
+}
+
+function nextSection(){
+  if(currentIndex < sections.length-1){
+    currentIndex++;
+    showSection(currentIndex);
+    startAudio();
+  }
+}
+
+function prevSection(){
+  if(currentIndex > 0){
+    currentIndex--;
+    showSection(currentIndex);
+  }
+}
+
+// Audio start
+let audioStarted=false;
+function startAudio(){
+  if(!audioStarted){
+    document.getElementById('music').play().catch(()=>{});
+    document.getElementById('bells').play().catch(()=>{});
+    audioStarted=true;
+  }
+}
+
+// Swipe
+let startX=0,endX=0;
+window.addEventListener('touchstart',(e)=>{startX=e.touches[0].clientX;});
+window.addEventListener('touchend',(e)=>{endX=e.changedTouches[0].clientX;handleSwipe();});
+function handleSwipe(){
+  const diff=startX-endX;
+  if(Math.abs(diff)>50){ diff>0?nextSection():prevSection(); }
+}
+
+// Tap
+window.addEventListener('click',(e)=>{
+  if(e.target.tagName!=='BUTTON' && e.target.tagName!=='A') nextSection();
+});
+
+// Countdown
+const date=new Date("April 8, 2026 10:36:00").getTime();
+setInterval(()=>{
+  const now=new Date().getTime();
+  const d=date-now;
+  const days=Math.floor(d/(1000*60*60*24));
+  const h=Math.floor((d%(1000*60*60*24))/(1000*60*60));
+  const m=Math.floor((d%(1000*60*60))/(1000*60));
+  const el=document.getElementById('countdown');
+  if(el) el.innerHTML=`${days}d ${h}h ${m}m to go`;
+},1000);
+
+// Particles
+const pcanvas=document.getElementById('particles');
+const pctx=pcanvas.getContext('2d');
+pcanvas.width=window.innerWidth;pcanvas.height=window.innerHeight;
+let parts=[];
+for(let i=0;i<80;i++){parts.push({x:Math.random()*pcanvas.width,y:Math.random()*pcanvas.height,r:Math.random()*2});}
+function drawP(){pctx.clearRect(0,0,pcanvas.width,pcanvas.height);pctx.fillStyle='gold';parts.forEach(p=>{pctx.beginPath();pctx.arc(p.x,p.y,p.r,0,Math.PI*2);pctx.fill();p.y+=0.3;if(p.y>pcanvas.height)p.y=0});requestAnimationFrame(drawP)}
+drawP();
+
+// Fireworks (disabled on last slide automatically)
+const fcanvas=document.getElementById('fireworks');
+const fctx=fcanvas.getContext('2d');
+fcanvas.width=window.innerWidth;fcanvas.height=window.innerHeight;
+function firework(){
+  const x=Math.random()*fcanvas.width;
+  const y=Math.random()*fcanvas.height/2;
+  for(let i=0;i<30;i++){
+    const angle=Math.random()*2*Math.PI;
+    const speed=Math.random()*5;
+    const dx=Math.cos(angle)*speed;
+    const dy=Math.sin(angle)*speed;
+    animateParticle(x,y,dx,dy);
+  }
+}
+function animateParticle(x,y,dx,dy){
+  let life=50;
+  function step(){
+    if(life--<=0)return;
+    fctx.fillStyle='gold';
+    fctx.fillRect(x,y,2,2);
+    x+=dx; y+=dy; dy+=0.05;
+    requestAnimationFrame(step);
+  }
+  step();
+}
+setInterval(firework,1500);
+
+</script>
+
+</body>
+</html>
