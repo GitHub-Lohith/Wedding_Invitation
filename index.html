@@ -304,10 +304,31 @@ setInterval(()=>{
 // Particles
 const pcanvas=document.getElementById('particles');
 const pctx=pcanvas.getContext('2d');
-pcanvas.width=window.innerWidth;pcanvas.height=window.innerHeight;
+function resizeCanvas(){
+  const dpr = window.devicePixelRatio || 1;
+
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+
+  pcanvas.width = w * dpr;
+  pcanvas.height = h * dpr;
+  pcanvas.style.width = w + "px";
+  pcanvas.style.height = h + "px";
+  pctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  fcanvas.width = w * dpr;
+  fcanvas.height = h * dpr;
+  fcanvas.style.width = w + "px";
+  fcanvas.style.height = h + "px";
+  fctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+resizeCanvas();
+
+window.addEventListener("resize", resizeCanvas);
+window.addEventListener("orientationchange", resizeCanvas);
 let parts=[];
 for(let i=0;i<80;i++){parts.push({x:Math.random()*pcanvas.width,y:Math.random()*pcanvas.height,r:Math.random()*2});}
-function drawP(){pctx.clearRect(0,0,pcanvas.width,pcanvas.height);pctx.fillStyle='gold';parts.forEach(p=>{pctx.beginPath();pctx.arc(p.x,p.y,p.r,0,Math.PI*2);pctx.fill();p.y+=0.3;if(p.y>pcanvas.height)p.y=0});requestAnimationFrame(drawP)}
+function drawP(){pctx.clearRect(0,0,pcanvas.width,pcanvas.height);pctx.fillStyle='rgba(255,215,0,0.7)';parts.forEach(p=>{pctx.beginPath();pctx.arc(p.x,p.y,p.r,0,Math.PI*2);pctx.fill();p.y+=0.3;if(p.y>pcanvas.height)p.y=0});requestAnimationFrame(drawP)}
 drawP();
 
 // Fireworks (disabled on last slide automatically)
