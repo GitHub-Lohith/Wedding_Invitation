@@ -189,8 +189,7 @@ section *{
 <!-- SECTION 1 -->
 <section id="s1" class="visible" style="background-image:url('slide1.JPG')">
   <h1 id="greeting" class="typing"></h1>
-  <button onclick="nextSection()">Enter Our Story</button>
-  <div class="hint">👉 Swipe or Tap</div>
+  <button onclick="nextSection()">Join US</button>
 </section>
 
 <!-- SECTION 2 -->
@@ -201,18 +200,11 @@ section *{
   <button onclick="nextSection()">Continue Journey</button>
 </section>
 
-<!-- SECTION 3 -->
-<section id="s3" class="hidden" style="background-image:url('slide3.jpg')">
-  <div class="blur-bg"></div>
-  <h1 class="typing">It all started with a beautiful connection...</h1>
-  <button onclick="nextSection()">Continue Journey</button>
-</section>
-
 <!-- SECTION 4 -->
 <section id="s4" class="hidden" style="background-image:url('slide4.JPG'); background-position:50% 30%;">
   <div class="blur-bg"></div>
   <h1 class="typing">You Are Invited...</h1>
-  <button onclick="nextSection()">See Our Big Day</button>
+  <button onclick="nextSection()">Join us on our Big Day</button>
 </section>
 
 <!-- FINAL SECTION -->
@@ -223,7 +215,7 @@ section *{
     <div class="countdown" id="countdown"></div>
 
     <button class="map-btn" onclick="openMaps()">
-      📍 Click to navigate in Maps
+      📍 Click to reach our Wedding Destination
     </button>
 
   </div>
@@ -239,10 +231,10 @@ section *{
 // Personalization
 const params=new URLSearchParams(window.location.search);
 const guest=params.get('name')||'There!';
-premiumTypingEffect("greeting", `Hey ${guest} You Are Invited to Our Wedding`, 35);
+premiumTypingEffect("greeting", `Two Souls, One Journey`, 35);
 
 // Sections
-const sections=['s1','s2','s3','s4','s5'];
+const sections=['s1','s2','s4','s5'];
 let currentIndex=0;
 
 function premiumTypingEffect(elementId, text, speed=40){
