@@ -16,8 +16,27 @@ section{position:absolute;width:100%;height:100vh;display:flex;flex-direction:co
 .visible{opacity:1;transform:scale(1)}
 
 /* Video initially hidden */
-video{position:fixed;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:-3;opacity:0;transition:opacity 1s ease}
-video.show{opacity:1}
+video{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%, -50%);
+  
+  width:auto;
+  height:100vh;   /* Force full height (portrait) */
+  
+  max-width:100%;
+  object-fit:contain; /* Prevent cropping */
+  
+  z-index:-3;
+  opacity:0;
+  transition:opacity 1s ease;
+  background:black;
+}
+
+video.show{
+  opacity:1;
+}
 
 canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-2}
 
@@ -153,6 +172,17 @@ function showSection(index){
 
   const video=document.getElementById('bgVideo');
   const fireworksCanvas=document.getElementById('fireworks');
+
+if(index === sections.length-1){
+  video.classList.add('show');
+  
+  video.muted = true;
+  video.setAttribute("playsinline", "");
+  video.setAttribute("webkit-playsinline", "");
+
+  video.play().catch(()=>{});
+  fireworksCanvas.style.display='none';
+}
 
   if(index === sections.length-1){
     video.classList.add('show');
