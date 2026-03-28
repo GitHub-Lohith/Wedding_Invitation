@@ -195,15 +195,9 @@ section *{
 <!-- SECTION 2 -->
 <section id="s2" class="hidden" style="background-image:url('slide2.JPG'); background-position:50% 10%;">
   <div class="blur-bg"></div>
-  <h1>Story of LOHITH ❤️ DEEPIKA</h1>
-  <img src="couple.JPG">
-  <button onclick="nextSection()">Continue Journey</button>
-</section>
-
-<!-- SECTION 4 -->
-<section id="s4" class="hidden" style="background-image:url('slide4.JPG'); background-position:50% 30%;">
-  <div class="blur-bg"></div>
-  <h1 class="typing">You Are Invited...</h1>
+  <h1>LOHITH ❤️ DEEPIKA
+      You Are Invited...
+  </h1>
   <button onclick="nextSection()">Join us on our Big Day</button>
 </section>
 
@@ -222,10 +216,6 @@ section *{
 
 </section>
 
-
-<audio id="music" src="music.mp3"></audio>
-<audio id="bells" src="bells.mp3"></audio>
-
 <script>
 
 // Personalization
@@ -234,7 +224,7 @@ const guest=params.get('name')||'There!';
 premiumTypingEffect("greeting", `Two Souls, One Journey`, 35);
 
 // Sections
-const sections=['s1','s2','s4','s5'];
+const sections=['s1','s2','s5'];
 let currentIndex=0;
 
 function premiumTypingEffect(elementId, text, speed=40){
@@ -321,16 +311,21 @@ function openMaps(){
 }
 
 // Countdown
-const date=new Date("April 8, 2026 10:36:00").getTime();
-setInterval(()=>{
-  const now=new Date().getTime();
-  const d=date-now;
-  const days=Math.floor(d/(1000*60*60*24));
-  const h=Math.floor((d%(1000*60*60*24))/(1000*60*60));
-  const m=Math.floor((d%(1000*60*60))/(1000*60));
-  const el=document.getElementById('countdown');
-  if(el) el.innerHTML=`${days}d ${h}h ${m}m to go`;
-},1000);
+const date = new Date("April 8, 2026 10:36:00").getTime();
+
+setInterval(() => {
+  const now = new Date().getTime();
+  const d = date - now;
+
+  const days = Math.floor(d / (1000 * 60 * 60 * 24));
+  const h = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const m = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60));
+  const s = Math.floor((d % (1000 * 60)) / 1000);
+
+  const el = document.getElementById('countdown');
+  if (el) el.innerHTML = `${days}d ${h}h ${m}m ${s}s to go`;
+
+}, 1000);
 
 </script>
 
