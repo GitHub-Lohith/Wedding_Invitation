@@ -44,13 +44,17 @@ video.show{
   opacity:1;
 }
 
+section{
+  z-index:1;
+}
+
 canvas{
   position:fixed;
   top:0;
   left:0;
   width:100%;
   height:100%;
-  z-index:-2;
+  z-index:0;   /* 🔥 bring above background */
   pointer-events:none;
 }
 
@@ -250,7 +254,7 @@ if(index === sections.length-1){
   if(index === sections.length-1){
     video.classList.add('show');
     video.play();
-    fireworksCanvas.style.display='none';
+    fireworksCanvas.style.display='block';
   } else {
     video.classList.remove('show');
     video.pause();
@@ -356,14 +360,25 @@ function firework(){
   }
 }
 function animateParticle(x,y,dx,dy){
-  let life=50;
+  let life = 50;
+
   function step(){
-    if(life--<=0)return;
-    fctx.fillStyle='rgba(255,215,0,0.9)';
-    fctx.fillRect(x,y,2,2);
-    x+=dx; y+=dy; dy+=0.05;
+    if(life-- <= 0) return;
+
+    fctx.clearRect(0, 0, fcanvas.width, fcanvas.height); // 🔥 clear frame
+
+    fctx.fillStyle = 'gold';
+    fctx.beginPath();
+    fctx.arc(x, y, 2, 0, Math.PI * 2);
+    fctx.fill();
+
+    x += dx;
+    y += dy;
+    dy += 0.05;
+
     requestAnimationFrame(step);
   }
+
   step();
 }
 setInterval(firework,1500);
